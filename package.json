@@ -35,7 +35,7 @@
         "@angular-eslint/eslint-plugin-template": "18.3.1",
         "@angular-eslint/schematics": "18.3.1",
         "@angular-eslint/template-parser": "18.3.1",
-        "@angular/cli": "^18.2.4",
+        "@angular/cli": "^20.3.10",
         "@angular/compiler-cli": "^18.2.4",
         "@angular/language-service": "^18.2.4",
         "@types/jest": "^29.5.13",
@@ -45,10 +45,12 @@
         "jest-jasmine2": "^29.7.0",
         "jest-preset-angular": "^14.2.4",
         "ng-mocks": "^14.13.1",
-        "ng-packagr": "^18.2.1",
         "ts-jest": "^29.2.5",
         "ts-mockito": "^2.6.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.5.4"
+    },
+    "overrides": {
+        "glob": "^11.1.0"
     }
 }
