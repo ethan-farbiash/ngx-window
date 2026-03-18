@@ -1,19 +1,15 @@
-// jest.config.js
+const { createCjsPreset } = require('jest-preset-angular/presets');
+
 module.exports = {
-    preset: 'jest-preset-angular',
+    ...createCjsPreset(),
     setupFilesAfterEnv: [
         '<rootDir>/setup-jest.ts'
     ],
     testPathIgnorePatterns: [
-        "<rootDir>/node_modules/",
-        "<rootDir>/dist/",
+        '<rootDir>/node_modules/',
+        '<rootDir>/dist/',
+        '<rootDir>/src/test.ts'
     ],
-    testRunner: 'jest-jasmine2',
-    globals: {
-        'ts-jest': {
-            esModuleInterop: true
-        }
-    },
     coverageThreshold: {
         global: {
             branches: 95,

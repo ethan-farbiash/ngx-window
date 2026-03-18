@@ -210,7 +210,7 @@ describe('WindowComponent', () => {
 
             component.window.open();
 
-            expect(windowServiceMock.open).toHaveBeenCalledWith(1234, jasmine.any(TemplateRef));
+            expect(windowServiceMock.open).toHaveBeenCalledWith(1234, expect.any(TemplateRef));
         });
     });
 
@@ -236,7 +236,7 @@ describe('WindowComponent', () => {
 
                 component.window.toggle();
 
-                expect(windowServiceMock.open).toHaveBeenCalledWith(1234, jasmine.any(TemplateRef));
+                expect(windowServiceMock.open).toHaveBeenCalledWith(1234, expect.any(TemplateRef));
             });
         });
 
