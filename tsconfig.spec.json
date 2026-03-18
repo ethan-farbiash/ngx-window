@@ -1,16 +1,20 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/spec",
     "types": [
-      "node",
-      "jest"
-    ]
+      "jest",
+      "node"
+    ],
+    "outDir": "./out-tsc/spec",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "files": [],
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
-  ]
+  ],
 }

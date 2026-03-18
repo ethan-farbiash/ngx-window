@@ -1,7 +1,10 @@
+## [0.4.0](https://github.com/ethan-far/ngx-window/compare/v0.3.0...v0.4.0) (2026-03-18)
+
+* Angular 21 support
+
 ## [0.3.0](https://github.com/ethan-far/ngx-window/compare/v0.2.1...v0.3.0) (2025-12-02)
 
 * Angular 20 support
-
 
 ## [0.2.1](https://github.com/ethan-far/ngx-window/compare/v0.1.0...v0.2.1) (2025-12-02)
 
