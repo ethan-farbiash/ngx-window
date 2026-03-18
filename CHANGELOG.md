@@ -1,3 +1,7 @@
+## [0.2.0](https://github.com/ethan-far/ngx-window/compare/v0.1.1...v0.2.0) (2026-03-07)
+
+* Angular 21 support
+
 ## [0.1.1](https://github.com/ethan-far/ngx-window/compare/v0.1.0...v0.1.1) (2025-01-21)
 
 * Fixed issue with lazy loaded modules (https://github.com/ethan-far/ngx-window/issues/34)

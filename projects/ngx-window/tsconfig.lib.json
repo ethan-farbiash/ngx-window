@@ -8,8 +8,8 @@
     "inlineSources": true,
     "types": [],
     "lib": [
-      "dom",
-      "es2018"
+      "ES2022",
+      "dom"
     ]
   },
   "exclude": [

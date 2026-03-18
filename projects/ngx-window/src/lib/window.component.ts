@@ -8,7 +8,8 @@ import { WindowOptions } from './window.types';
 @Component({
     selector: 'ngx-window',
     templateUrl: './window.component.html',
-    styleUrls: ['./window.component.scss']
+    styleUrls: ['./window.component.scss'],
+    standalone: false
 })
 export class WindowComponent implements OnInit, AfterContentChecked, OnDestroy {
 
@@ -87,7 +88,7 @@ export class WindowComponent implements OnInit, AfterContentChecked, OnDestroy {
         this._moveSubscription?.unsubscribe();
     }
 
-    @HostListener('window:resize', ['$event'])
+    @HostListener('window:resize', [])
     onWindowResize() {
         if (this.windowService.isOpen(this._id!)) {
             this.changeDetectorRef.detectChanges();
