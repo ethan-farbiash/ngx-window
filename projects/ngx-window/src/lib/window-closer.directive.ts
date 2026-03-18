@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Directive, ElementRef } from '@angular/core';
 import { WindowService } from './window.service';
 
 @Directive({

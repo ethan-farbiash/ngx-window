@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild, ViewRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { filter, map, mergeWith, Subscription, tap } from 'rxjs';
 import { AlignmentService } from './alignment.service';
 import { ElementPositionService } from './element-position.service';
@@ -88,7 +88,7 @@ export class WindowComponent implements OnInit, AfterContentChecked, OnDestroy {
         this._moveSubscription?.unsubscribe();
     }
 
-    @HostListener('window:resize', [])
+    @HostListener('window:resize')
     onWindowResize() {
         if (this.windowService.isOpen(this._id!)) {
             this.changeDetectorRef.detectChanges();
