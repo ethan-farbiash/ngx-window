@@ -1,4 +1,4 @@
-import { ApplicationRef, ComponentFactoryResolver, ComponentRef, Injector } from '@angular/core';
+import { ApplicationRef, ComponentRef, Injector } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { mock } from 'ts-mockito';
@@ -10,7 +10,6 @@ describe('installWindowContainer', () => {
 
     let applicationRef: ApplicationRef;
     let injector: Injector;
-    let componentFactoryResolver: ComponentFactoryResolver;
 
     let listener: (component: ComponentRef<any>) => void;
 
@@ -31,9 +30,8 @@ describe('installWindowContainer', () => {
     beforeEach(() => {
         applicationRef = TestBed.inject(ApplicationRef);
         injector = TestBed.inject(Injector);
-        componentFactoryResolver = TestBed.inject(ComponentFactoryResolver);
 
-        listener = installWindowContainer(applicationRef, injector, componentFactoryResolver);
+        listener = installWindowContainer(applicationRef, injector);
     });
 
     describe('creates a <ngx-window-container> component', () => {
