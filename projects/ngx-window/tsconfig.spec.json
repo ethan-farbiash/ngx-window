@@ -2,10 +2,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/spec",
     "types": [
-      "jest"
-    ]
+      "jest",
+      "node"
+    ],
+    "outDir": "../../out-tsc/spec"
   },
   "files": [],
   "include": [
