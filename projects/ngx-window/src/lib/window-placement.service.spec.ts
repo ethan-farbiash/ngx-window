@@ -180,4 +180,40 @@ describe('WindowPlacementService', () => {
 
         expect(offset).toEqual({ top: 400, left: 865 });
     });
+
+    it('handles fallback placements without alignment overrides when the primary alignment is also undefined', () => {
+        const offset = service.resolve({
+            adaptivePlacements: [{}],
+            height: 1000,
+            leftOffset: 15,
+            topOffset: 25,
+            width: 1200
+        });
+
+        expect(offset).toEqual({ top: 25, left: 15 });
+    });
+
+    it('keeps inherited offsets when the fallback changes to a center-based alignment instead of flipping sides', () => {
+        const offset = service.resolve({
+            alignment: {
+                reference: { horizontal: 'right' },
+                window: { horizontal: 'left' }
+            },
+            adaptivePlacements: [
+                {
+                    alignment: {
+                        reference: { horizontal: 'center' },
+                        window: { horizontal: 'left' }
+                    }
+                }
+            ],
+            height: 150,
+            leftOffset: 18,
+            referencePosition: { ...referencePosition, left: 1130, width: 60 },
+            topOffset: 0,
+            width: 260
+        });
+
+        expect(offset).toEqual({ top: 400, left: 1178 });
+    });
 });

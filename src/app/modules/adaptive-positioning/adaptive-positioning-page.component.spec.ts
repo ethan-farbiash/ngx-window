@@ -102,6 +102,17 @@ describe('AdaptivePositioningPageComponent', () => {
         expect(referenceElement.styles['top']).toEqual('15px');
     });
 
+    it('ignores drag events when the coordinates are incomplete', () => {
+        fixture.detectChanges();
+
+        const referenceElement = element.query(By.css('.reference'));
+        referenceElement.triggerEventHandler('dragstart', { x: 100, y: 200 });
+        referenceElement.triggerEventHandler('drag', { x: 0, y: 215 });
+
+        expect(referenceElement.styles['left']).toEqual('');
+        expect(referenceElement.styles['top']).toEqual('');
+    });
+
     it('prevents the default drag over behavior so dragging can continue inside the stage', () => {
         const eventMock = new Event('dragover');
         jest.spyOn(eventMock, 'preventDefault');
