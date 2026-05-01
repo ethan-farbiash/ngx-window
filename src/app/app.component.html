@@ -1,11 +1,13 @@
 <div class="test-application">
-    <div class="title">
+    <header class="title">
+        <p class="eyebrow">Angular window demos</p>
         <h1>ngx-window Test Application</h1>
-    </div>
+    </header>
     <nav class="main-navigation">
         <ol class="link-list">
             <ngx-test-link class="drop-downs" [title]="'Drop downs'" [url]="'/drop-downs'"></ngx-test-link>
             <ngx-test-link class="resize-and-move" [title]="'Resize & Move'" [url]="'/resize-and-move'"></ngx-test-link>
+            <ngx-test-link class="adaptive-positioning" [title]="'Adaptive Positioning'" [url]="'/adaptive-positioning'"></ngx-test-link>
         </ol>
     </nav>
     <router-outlet class="main-content"></router-outlet>

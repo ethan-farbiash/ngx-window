@@ -5,12 +5,14 @@ import { ElementPositionService } from './element-position.service';
 import { WindowCloserDirective } from './window-closer.directive';
 import { WindowContainerComponent } from './window-container.component';
 import { WindowComponent } from './window.component';
+import { WindowPlacementService } from './window-placement.service';
 
 @NgModule({
     imports: [],
     providers: [
         ElementPositionService,
         AlignmentService,
+        WindowPlacementService,
         {
             provide: APP_BOOTSTRAP_LISTENER,
             multi: true,

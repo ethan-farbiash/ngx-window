@@ -4,15 +4,16 @@
 
 A generic, light weight, window layer component for Angular 2+ to allow front layer windows such as: dropdowns, popups, modals, tooltips, etc.
   
-![ngx-window-1](https://github.com/user-attachments/assets/3c64d4e7-853d-4ade-9359-72de2c2ae365)
-![ngx-window-scrshot-2](https://github.com/user-attachments/assets/a344f3e3-9a60-4273-90b5-4a8614b173a0)
+![Drop downs demo](https://raw.githubusercontent.com/ethan-far/ngx-window/main/docs/screenshots/drop-downs.png)
+![Resize and move demo](https://raw.githubusercontent.com/ethan-far/ngx-window/main/docs/screenshots/resize-and-move.png)
+![Adaptive positioning demo](https://raw.githubusercontent.com/ethan-far/ngx-window/main/docs/screenshots/adaptive-positioning.png)
 
 # Features
 
 - Windows are not affected by attributes of the reference element's hierarchy, e.g. overflow, display, position, etc.
 - Controlled from the component using it, and can be opened, closed or toggled programmatically
 - Enables closing from within using the `WindowCloser` directive
-- Supports alignment to the viewport, or the reference element (when exists) according to several anchor points (future plans include automatic alignment based on available viewport space), including an offset from the anchor point
+- Supports alignment to the viewport, or the reference element (when exists) according to several anchor points, including viewport-aware fallback placements and anchor offsets
 - Configurable automatic closing when:
     - Clicked elsewhere
     - Reference element is off view
@@ -29,7 +30,7 @@ Latest version available for each version of Angular
 
 | ngx-window-component | Angular |
 | -------------------- | ------- |
-| 0.4.0                | 21.x    |
+| 0.5.0                | 21.x    |
 | 0.3.0                | 20.x    |
 | 0.2.1                | 19.x    |
 | 0.1.0                | 18.x    |
@@ -89,6 +90,10 @@ Drop down component template:
 | alignment.window.vertical          | union [see below](#vertical-anchors)   | 'top'   | Align the window according to its specified vertical anchor 						|
 | alignment.reference.horizontal     | union [see below](#horizontal-anchors) | 'left'  | Align the window according to the reference element's specified horizontal anchor |
 | alignment.reference.vertical       | union [see below](#vertical-anchors)   | 'top'   | Align the window according to the reference element's specified vertical anchor   |
+| adaptivePosition.viewportPadding   | number 								  | 0       | Minimum viewport padding used when evaluating fallback placements                 |
+| adaptivePosition.placements        | `AdaptivePlacement[]`                   | `[]`    | Ordered fallback placements tried after the primary placement                    |
+
+`AdaptivePlacement` accepts `alignment`, `topOffset`, and `leftOffset`. Omitted offsets inherit from the primary placement, and are mirrored automatically when the fallback flips to the opposite side.
 
 # Horizontal Anchors
 

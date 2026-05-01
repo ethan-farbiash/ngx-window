@@ -33,7 +33,19 @@ export interface AlignmentOptions {
     reference?: Alignment;
 }
 
+export interface AdaptivePlacement {
+    alignment?: AlignmentOptions;
+    topOffset?: number;
+    leftOffset?: number;
+}
+
+export interface AdaptivePositionOptions {
+    placements: AdaptivePlacement[];
+    viewportPadding?: number;
+}
+
 export interface WindowOptions {
     visibility?: VisibilityOptions,
-    alignment?: AlignmentOptions
+    alignment?: AlignmentOptions,
+    adaptivePosition?: AdaptivePositionOptions
 };

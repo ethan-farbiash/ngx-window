@@ -1,3 +1,9 @@
+## [0.5.0](https://github.com/ethan-far/ngx-window/compare/v0.4.0...v0.5.0) (2026-05-01)
+
+* Added opt-in adaptive viewport positioning with ordered fallback placements
+* Fixed right and bottom aligned windows when the rendered size is not supplied up front
+* Refreshed the demo application and added an adaptive positioning showcase page
+
 ## [0.4.0](https://github.com/ethan-far/ngx-window/compare/v0.3.0...v0.4.0) (2026-03-18)
 
 * Angular 21 support

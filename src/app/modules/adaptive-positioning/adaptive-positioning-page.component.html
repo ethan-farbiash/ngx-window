@@ -1,0 +1,24 @@
+<div class="adaptive-positioning-page" (dragover)="onDragOver($event)">
+    <section class="hero">
+        <p class="eyebrow">Adaptive positioning</p>
+        <h2>Drag the trigger around and watch the window choose a better side.</h2>
+        <p class="description">
+            The demo window starts below the reference element, flips above when vertical space runs out,
+            and then falls back to the left or right when the viewport edges get tight.
+        </p>
+    </section>
+
+    <div class="stage">
+        <div class="reference" #reference draggable="true" (dragstart)="onDragStart($event)" (drag)="onDrag($event)">
+            Drag me
+        </div>
+
+        <ngx-window class="adaptive-window" [refElement]="reference" [topOffset]="14" [leftOffset]="12" [options]="windowOptions">
+            <div class="adaptive-window-content">
+                <p class="window-kicker">Live demo</p>
+                <h3>Viewport-aware fallback</h3>
+                <p>Try the corners to force a flip.</p>
+            </div>
+        </ngx-window>
+    </div>
+</div>

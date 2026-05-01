@@ -100,6 +100,19 @@ describe('WindowService', () => {
         });
     });
 
+    describe('"getWindowElement"', () => {
+        it('returns the rendered html element of an open window', () => {
+            const renderedElement = document.createElement('section');
+            Object.defineProperty(viewMock1, 'rootNodes', { value: ['text node', renderedElement] });
+            windowService.registerContainer(containerMock);
+            const id = windowService.registerWindow(windowRef, windowRefElement);
+
+            windowService.open(id, templateMock);
+
+            expect(windowService.getWindowElement(id)).toBe(renderedElement);
+        });
+    });
+
     describe('on routing', () => {
         beforeEach(() => {
             // Note: It is not good to spy on the unit under test, but since the close functionality is considerable, it's better than repeating all the tests

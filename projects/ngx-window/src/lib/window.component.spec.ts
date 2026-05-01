@@ -3,17 +3,31 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { mock } from 'ts-mockito';
-import { AlignmentService } from './alignment.service';
 import { ElementPositionService } from './element-position.service';
 
 import { WindowComponent } from './window.component';
+import { WindowPlacementService } from './window-placement.service';
 import { WindowService } from './window.service';
 
 describe('WindowComponent', () => {
 
+    class ResizeObserverMock {
+        constructor(callback: ResizeObserverCallback) {
+            resizeObserverCallback = callback;
+            resizeObserverInstance = this;
+        }
+
+        disconnect = jest.fn();
+        observe = jest.fn();
+        unobserve = jest.fn();
+    }
+
     let windowServiceMock: WindowService;
     let elementPositionServiceMock: ElementPositionService;
-    let alignmentServiceMock: AlignmentService;
+    let windowPlacementServiceMock: WindowPlacementService;
+    let resizeObserverCallback: ResizeObserverCallback;
+    let resizeObserverInstance: ResizeObserverMock | undefined;
+    let originalResizeObserver: typeof ResizeObserver | undefined;
 
     let elementMock: HTMLElement;
     let containerRef: ViewContainerRef;
@@ -23,13 +37,16 @@ describe('WindowComponent', () => {
     let element: DebugElement;
 
     beforeEach(waitForAsync(() => {
+        originalResizeObserver = window.ResizeObserver;
+        window.ResizeObserver = ResizeObserverMock as any;
+        resizeObserverInstance = undefined;
         windowServiceMock = mock(WindowService);
         Object.defineProperty(windowServiceMock, 'windowOpened$', { value: new Subject() });
         Object.defineProperty(windowServiceMock, 'windowClosed$', { value: new Subject() });
         Object.defineProperty(windowServiceMock, 'windowMoved$', { value: new Subject() });
 
         elementPositionServiceMock = mock(ElementPositionService);
-        alignmentServiceMock = mock(AlignmentService);
+        windowPlacementServiceMock = mock(WindowPlacementService);
 
         elementMock = document.createElement('div');
 
@@ -38,10 +55,12 @@ describe('WindowComponent', () => {
         jest.spyOn(windowServiceMock, 'registerWindow').mockReturnValue(1234);
         jest.spyOn(windowServiceMock, 'open');
         jest.spyOn(windowServiceMock, 'close');
+        jest.spyOn(windowServiceMock, 'getWindowElement').mockReturnValue(undefined);
 
         jest.spyOn(elementPositionServiceMock, 'getPosition').mockReturnValue({
             top: 200, left: 100, width: 400, height: 300
         });
+        jest.spyOn(windowPlacementServiceMock, 'resolve').mockReturnValue({ top: 123, left: 456 });
 
         TestBed.configureTestingModule({
             declarations: [
@@ -50,7 +69,7 @@ describe('WindowComponent', () => {
             providers: [
                 { provide: WindowService, useFactory: () => windowServiceMock },
                 { provide: ElementPositionService, useFactory: () => elementPositionServiceMock },
-                { provide: AlignmentService, useFactory: () => alignmentServiceMock }
+                { provide: WindowPlacementService, useFactory: () => windowPlacementServiceMock }
             ]
         }).compileComponents();
     }));
@@ -59,6 +78,10 @@ describe('WindowComponent', () => {
         fixture = TestBed.createComponent(TestHostComponent);
         component = fixture.componentInstance;
         element = fixture.debugElement;
+    });
+
+    afterEach(() => {
+        window.ResizeObserver = originalResizeObserver as any;
     });
 
     describe('on init', () => {
@@ -287,7 +310,6 @@ describe('WindowComponent', () => {
 
             describe('the "top" and "left" styles', () => {
                 it('to the offset after alignment', () => {
-                    jest.spyOn(alignmentServiceMock, 'align').mockReturnValue({ top: 123, left: 456 });
                     component.window.topOffset = 50;
                     component.window.leftOffset = 100;
                     component.window.width = 180;
@@ -303,18 +325,25 @@ describe('WindowComponent', () => {
 
                     let divElement = element.query(By.css('.window'));
 
-                    expect(alignmentServiceMock.align).toHaveBeenCalledWith(
-                        { top: 50, left: 100, width: 180, height: 240 },
-                        { horizontal: 'left', vertical: 'center' },
-                        { top: 200, left: 100, width: 400, height: 300 },
-                        { horizontal: 'right', vertical: 'bottom' }
-                    );
+                    expect(windowPlacementServiceMock.resolve).toHaveBeenCalledWith({
+                        alignment: {
+                            window: { horizontal: 'left', vertical: 'center' },
+                            reference: { horizontal: 'right', vertical: 'bottom' }
+                        },
+                        adaptivePlacements: undefined,
+                        height: 240,
+                        leftOffset: 100,
+                        referencePosition: { top: 200, left: 100, width: 400, height: 300 },
+                        topOffset: 50,
+                        viewportPadding: undefined,
+                        width: 180
+                    });
                     expect(divElement.styles['top']).toEqual('123px');
                     expect(divElement.styles['left']).toEqual('456px');
                 });
 
                 it('rounded to the nearest pixel 100th', () => {
-                    jest.spyOn(alignmentServiceMock, 'align').mockReturnValue({ top: 250.002, left: 200.007 });
+                    jest.spyOn(windowPlacementServiceMock, 'resolve').mockReturnValue({ top: 250.002, left: 200.007 });
                     fixture.detectChanges();
 
                     let divElement = element.query(By.css('.window'));
@@ -322,6 +351,7 @@ describe('WindowComponent', () => {
                     expect(divElement.styles['top']).toEqual('250px');
                     expect(divElement.styles['left']).toEqual('200.01px');
                 });
+
             });
 
             it('the "width" and "height" styles set to the values of "width" and "height"', () => {
@@ -332,6 +362,110 @@ describe('WindowComponent', () => {
                 expect(divElement.styles['width']).toEqual('123px');
                 expect(divElement.styles['height']).toEqual('456px');
             });
+        });
+    });
+
+    describe('when width and height are not provided', () => {
+        beforeEach(() => {
+            jest.spyOn(windowServiceMock, 'open').mockImplementation(
+                (id: number, template: TemplateRef<any>) => {
+                    containerRef.createEmbeddedView(template, {});
+                });
+
+            component.width = undefined;
+            component.height = undefined;
+            fixture.detectChanges();
+        });
+
+        it('uses the measured size when resolving the position after opening', () => {
+            const windowElementMock = document.createElement('div');
+            jest.spyOn(windowElementMock, 'getBoundingClientRect').mockReturnValue({
+                x: 0, y: 0, top: 0, left: 0, right: 180, bottom: 240, width: 180, height: 240, toJSON: () => { }
+            });
+            jest.spyOn(windowServiceMock, 'getWindowElement').mockReturnValue(windowElementMock);
+
+            component.window.open();
+            windowServiceMock.windowOpened$.next(1234);
+            fixture.detectChanges();
+
+            expect(windowPlacementServiceMock.resolve).toHaveBeenCalledWith({
+                alignment: undefined,
+                adaptivePlacements: undefined,
+                height: 240,
+                leftOffset: 246,
+                referencePosition: undefined,
+                topOffset: 135,
+                viewportPadding: undefined,
+                width: 180
+            });
+        });
+
+        it('keeps the window hidden until its size is measured', () => {
+            const windowElementMock = document.createElement('div');
+            jest.spyOn(windowElementMock, 'getBoundingClientRect').mockReturnValue({
+                x: 0, y: 0, top: 0, left: 0, right: 180, bottom: 240, width: 180, height: 240, toJSON: () => { }
+            });
+            jest.spyOn(windowServiceMock, 'getWindowElement').mockReturnValue(windowElementMock);
+
+            component.window.open();
+            fixture.detectChanges();
+
+            let divElement = element.query(By.css('.window'));
+            expect(divElement.styles['visibility']).toEqual('hidden');
+
+            windowServiceMock.windowOpened$.next(1234);
+            fixture.detectChanges();
+
+            divElement = element.query(By.css('.window'));
+            expect(divElement.styles['visibility']).toEqual('');
+        });
+
+        it('observes the rendered window and remeasures it when the content size changes', () => {
+            const windowElementMock = document.createElement('div');
+            const detectChangesSpy = jest.spyOn((component.window as any).changeDetectorRef, 'detectChanges');
+            const measureSpy = jest.spyOn(component.window as any, 'measureWindow');
+            const rects = [
+                { x: 0, y: 0, top: 0, left: 0, right: 180, bottom: 240, width: 180, height: 240, toJSON: () => { } },
+                { x: 0, y: 0, top: 0, left: 0, right: 210, bottom: 280, width: 210, height: 280, toJSON: () => { } }
+            ];
+            jest.spyOn(windowElementMock, 'getBoundingClientRect').mockImplementation(() => rects.shift()! as DOMRect);
+            jest.spyOn(windowServiceMock, 'getWindowElement').mockReturnValue(windowElementMock);
+
+            component.window.open();
+            windowServiceMock.windowOpened$.next(1234);
+
+            expect(resizeObserverInstance?.observe).toHaveBeenCalledWith(windowElementMock);
+
+            resizeObserverCallback([], resizeObserverInstance as unknown as ResizeObserver);
+            fixture.detectChanges();
+
+            expect(measureSpy).toHaveBeenCalled();
+            expect(detectChangesSpy).toHaveBeenCalled();
+            expect(windowPlacementServiceMock.resolve).toHaveBeenCalledWith({
+                alignment: undefined,
+                adaptivePlacements: undefined,
+                height: 280,
+                leftOffset: 246,
+                referencePosition: undefined,
+                topOffset: 135,
+                viewportPadding: undefined,
+                width: 210
+            });
+        });
+
+        it('skips setting up a resize observer when ResizeObserver is unavailable', () => {
+            const windowElementMock = document.createElement('div');
+            jest.spyOn(windowElementMock, 'getBoundingClientRect').mockReturnValue({
+                x: 0, y: 0, top: 0, left: 0, right: 180, bottom: 240, width: 180, height: 240, toJSON: () => { }
+            });
+            jest.spyOn(windowServiceMock, 'getWindowElement').mockReturnValue(windowElementMock);
+            window.ResizeObserver = undefined as any;
+
+            component.window.open();
+            windowServiceMock.windowOpened$.next(1234);
+            fixture.detectChanges();
+
+            expect(resizeObserverInstance).toBeUndefined();
         });
     });
 
@@ -358,7 +492,7 @@ describe('WindowComponent', () => {
 
 @Component({
     template: `    
-        <ngx-window [width]="123" [height]="456" [topOffset]="135" [leftOffset]="246"
+        <ngx-window [width]="width" [height]="height" [topOffset]="135" [leftOffset]="246"
             (visibleChange)="windowVisible=$event" #window>
             <p class="transclusion-test">test content</p>
         </ngx-window>
@@ -371,6 +505,8 @@ class TestHostComponent implements OnInit {
     @ViewChild('container', { static: true, read: ViewContainerRef }) container!: ViewContainerRef;
     @ViewChild('window', { static: true }) window!: WindowComponent;
 
+    width: number | undefined = 123;
+    height: number | undefined = 456;
     windowVisible?: boolean;
 
     constructor(private windowService: WindowService) { }

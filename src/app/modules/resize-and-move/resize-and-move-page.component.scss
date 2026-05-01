@@ -1,8 +1,16 @@
 .resize-and-move-page {
-    width: calc(100vw - 40px);
-    height: calc(100vh - 140px);
+    width: calc(100vw - 48px);
+    height: calc(100vh - 188px);
     box-sizing: border-box;
-    margin: 20px;
-    border: 1px solid var(--color-blue5);
+    margin: 24px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 30px;
     position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgb(255 255 255 / 0.94), rgb(232 243 255 / 0.9)),
+        linear-gradient(90deg, rgb(75 146 214 / 0.08) 1px, transparent 1px),
+        linear-gradient(rgb(75 146 214 / 0.08) 1px, transparent 1px);
+    background-size: auto, 40px 40px, 40px 40px;
+    box-shadow: var(--shadow-soft);
 }
