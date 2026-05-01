@@ -216,4 +216,47 @@ describe('WindowPlacementService', () => {
 
         expect(offset).toEqual({ top: 400, left: 1178 });
     });
+
+    it('falls back to the original offsets if no placement candidates are available', () => {
+        jest.spyOn(service as any, 'buildCandidates').mockReturnValue([]);
+
+        const offset = service.resolve({
+            height: 100,
+            leftOffset: 33,
+            topOffset: 22,
+            width: 120
+        });
+
+        expect(offset).toEqual({ top: 22, left: 33 });
+    });
+
+    it('uses document element scroll offsets when window scroll offsets are unavailable', () => {
+        Object.defineProperty(window, 'scrollX', { value: undefined, configurable: true });
+        Object.defineProperty(window, 'scrollY', { value: undefined, configurable: true });
+        Object.defineProperty(document.documentElement, 'scrollLeft', { value: 210, configurable: true });
+        Object.defineProperty(document.documentElement, 'scrollTop', { value: 160, configurable: true });
+        window.innerWidth = 300;
+        window.innerHeight = 240;
+
+        const offset = service.resolve({
+            alignment: {
+                reference: { horizontal: 'right', vertical: 'bottom' }
+            },
+            adaptivePlacements: [
+                {
+                    alignment: {
+                        reference: { horizontal: 'left', vertical: 'top' },
+                        window: { horizontal: 'right', vertical: 'bottom' }
+                    }
+                }
+            ],
+            height: 120,
+            leftOffset: 8,
+            referencePosition: { top: 170, left: 220, width: 30, height: 20 },
+            topOffset: 8,
+            width: 120
+        });
+
+        expect(offset).toEqual({ top: 198, left: 258 });
+    });
 });

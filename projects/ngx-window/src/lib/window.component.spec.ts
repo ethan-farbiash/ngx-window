@@ -452,6 +452,21 @@ describe('WindowComponent', () => {
                 width: 210
             });
         });
+
+        it('skips setting up a resize observer when ResizeObserver is unavailable', () => {
+            const windowElementMock = document.createElement('div');
+            jest.spyOn(windowElementMock, 'getBoundingClientRect').mockReturnValue({
+                x: 0, y: 0, top: 0, left: 0, right: 180, bottom: 240, width: 180, height: 240, toJSON: () => { }
+            });
+            jest.spyOn(windowServiceMock, 'getWindowElement').mockReturnValue(windowElementMock);
+            window.ResizeObserver = undefined as any;
+
+            component.window.open();
+            windowServiceMock.windowOpened$.next(1234);
+            fixture.detectChanges();
+
+            expect(resizeObserverInstance).toBeUndefined();
+        });
     });
 
     describe('contains', () => {
