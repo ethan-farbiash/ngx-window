@@ -4,7 +4,7 @@
     min-width: 100px;
     min-height: 50px;
     position: absolute;
-    background-color: var(--color-blue4);
+    background: linear-gradient(135deg, var(--color-blue5), var(--color-blue4));
     left: calc(50% - 100px);
     top: calc(50% - 150px);
     font-size: 24px;
@@ -12,15 +12,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 3px solid var(--color-white);
+    border: 1px solid rgb(255 255 255 / 0.72);
+    border-radius: 24px;
     resize: both;
     overflow: hidden;
     z-index: 1;
     cursor: default;
-    box-shadow: var(--slight-shadow);
+    box-shadow: var(--shadow-pop);
 
     &:active {
-        background-color: var(--color-blue5);
+        background: linear-gradient(135deg, var(--color-blue6), var(--color-blue5));
     }
 }
 
@@ -28,10 +29,11 @@
     width: 100px;
     height: 30px;
     display: flex;
-    background-color: var(--color-blue3);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.95), rgb(225 239 255 / 0.95));
     justify-content: center;
     align-items: center;
-    border: 2px solid var(--color-white);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 999px;
     color: var(--color-blue6);
-    box-shadow: var(--slight-shadow);
+    box-shadow: var(--shadow-soft);
 }

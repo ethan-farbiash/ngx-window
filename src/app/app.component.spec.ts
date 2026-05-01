@@ -40,11 +40,11 @@ describe('AppComponent', () => {
                 expect(divElement !== null).toBeTruthy();
             });
 
-            describe('<div> element with', () => {
+            describe('<header> element with', () => {
                 it('class "title"', () => {
                     fixture.detectChanges();
 
-                    let divElement = element.query(By.css('.test-application div.title'));
+                    let divElement = element.query(By.css('.test-application header.title'));
 
                     expect(divElement !== null).toBeTruthy();
                 });
@@ -131,6 +131,34 @@ describe('AppComponent', () => {
                             let linkComponent = linkElement.componentInstance as LinkComponent;
 
                             expect(linkComponent.url).toEqual('/resize-and-move');
+                        });
+                    });
+
+                    describe('<ngx-test-link> component with', () => {
+                        it('class "adaptive-positioning"', () => {
+                            fixture.detectChanges();
+
+                            let linkElement = element.query(By.css('.link-list ngx-test-link.adaptive-positioning'));
+
+                            expect(linkElement !== null).toBeTruthy();
+                        });
+
+                        it('the expected title', () => {
+                            fixture.detectChanges();
+
+                            let linkElement = element.query(By.css('.adaptive-positioning'));
+                            let linkComponent = linkElement.componentInstance as LinkComponent;
+
+                            expect(linkComponent.title).toEqual('Adaptive Positioning');
+                        });
+
+                        it('the expected url', () => {
+                            fixture.detectChanges();
+
+                            let linkElement = element.query(By.css('.adaptive-positioning'));
+                            let linkComponent = linkElement.componentInstance as LinkComponent;
+
+                            expect(linkComponent.url).toEqual('/adaptive-positioning');
                         });
                     });
                 });

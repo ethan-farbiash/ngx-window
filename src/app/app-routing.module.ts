@@ -10,6 +10,10 @@ const routes: Routes = [
         path: 'resize-and-move',
         loadChildren: () => import('./modules/resize-and-move/resize-and-move-page.module').then(m => m.ResizeAndMovePageModule)
     },
+    {
+        path: 'adaptive-positioning',
+        loadChildren: () => import('./modules/adaptive-positioning/adaptive-positioning-page.module').then(m => m.AdaptivePositioningPageModule)
+    },
     { path: '**', redirectTo: 'drop-downs', pathMatch: 'full' },
 ];
 

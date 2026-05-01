@@ -1,18 +1,29 @@
 .link {
     cursor: pointer;
-    color: white;
-    padding: 5px 10px;
+    color: var(--color-ink-soft);
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
 
     &:hover {
-        color: var(--color-blue6);
+        color: var(--color-accent-strong);
+        background-color: rgb(255 255 255 / 0.82);
+        border-color: var(--color-border-soft);
+        transform: translateY(-1px);
     }
 
     &.active-link {
-        background-color: var(--color-blue6);
+        background: linear-gradient(135deg, var(--color-accent-strong), var(--color-accent-soft));
         cursor: default;
+        color: var(--color-white);
+        box-shadow: var(--shadow-soft);
 
         &:hover {
-            color: white;
+            color: var(--color-white);
+            background: linear-gradient(135deg, var(--color-accent-strong), var(--color-accent-soft));
+            border-color: transparent;
+            transform: none;
         }
     }
 }

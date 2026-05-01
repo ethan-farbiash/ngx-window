@@ -115,6 +115,12 @@ export class WindowService implements OnDestroy {
         return !!window?.view;
     }
 
+    getWindowElement(id: number): HTMLElement | undefined {
+        const view = this._windows[id]?.view;
+
+        return view?.rootNodes.find(node => node instanceof HTMLElement);
+    }
+
     open(id: number, template: TemplateRef<any>) {
         if (this._container && !this.isOpen(id)) {
             const window = this._windows[id];

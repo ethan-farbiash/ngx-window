@@ -1,24 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-    --color-blue1: #f0f7ff;
-    --color-blue2: #cef;
-    --color-blue3: #9cf;
-    --color-blue4: #6ae;
-    --color-blue5: #38d;
-    --color-blue6: #269;
+    --color-blue1: #f5f9ff;
+    --color-blue2: #dcecff;
+    --color-blue3: #acd4ff;
+    --color-blue4: #5ca3ec;
+    --color-blue5: #2475c9;
+    --color-blue6: #123d6f;
+    --color-accent-soft: #5ca3ec;
+    --color-accent-strong: #2475c9;
+    --color-ink-strong: #18344f;
+    --color-ink-soft: #45617c;
+    --color-border-soft: rgb(36 117 201 / 0.18);
+    --color-border-strong: rgb(36 117 201 / 0.3);
 
     --color-white: #fff;
 
-    --slight-shadow: 0px 2px 4px 0px rgb(0 0 0 / 25%);
+    --slight-shadow: 0px 10px 24px 0px rgb(24 52 79 / 0.12);
+    --shadow-soft: 0px 20px 48px rgb(15 55 97 / 0.12);
+    --shadow-pop: 0px 24px 54px rgb(10 43 80 / 0.24);
 }
 
 body {
     margin: 0;
-    background-color: var(--color-blue2);
+    color: var(--color-ink-strong);
+    background:
+        radial-gradient(circle at top left, rgb(163 211 255 / 0.45), transparent 24%),
+        linear-gradient(180deg, #f8fbff 0%, #e7f1fb 100%);
 }
 
 * {
-    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
 
     &.cursive {
         font-family: 'Rancho', cursive;
