@@ -5,12 +5,14 @@
         "ng": "ng",
         "start": "ng serve -o --host 127.0.0.1 --port 4100",
         "build": "ng build",
+        "sync:readme": "node scripts/sync-readme.js",
         "build:lib": "ng build ngx-window",
+        "prebuild:lib": "npm run sync:readme",
         "watch": "ng build --watch --configuration development",
         "test": "jest --watch",
         "test:jest": "jest",
         "test:coverage": "jest --coverage",
-        "release": "npm publish ./dist/ngx-window"
+        "release": "npm run build:lib && npm publish ./dist/ngx-window"
     },
     "private": true,
     "dependencies": {
